@@ -1,0 +1,9 @@
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\bin\Debug\TesteSenior.Application.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\bin\Debug\TesteSenior.Application.pdb
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\bin\Debug\TesteSenior.Domain.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\bin\Debug\TesteSenior.Repository.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\bin\Debug\TesteSenior.Domain.pdb
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\bin\Debug\TesteSenior.Repository.pdb
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\obj\Debug\TesteSenior.Application.csprojResolveAssemblyReference.cache
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\obj\Debug\TesteSenior.Application.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Application\obj\Debug\TesteSenior.Application.pdb

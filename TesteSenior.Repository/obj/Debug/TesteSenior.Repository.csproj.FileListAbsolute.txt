@@ -1,0 +1,7 @@
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\bin\Debug\TesteSenior.Repository.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\bin\Debug\TesteSenior.Repository.pdb
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\bin\Debug\TesteSenior.Domain.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\bin\Debug\TesteSenior.Domain.pdb
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\obj\Debug\TesteSenior.Repository.csprojResolveAssemblyReference.cache
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\obj\Debug\TesteSenior.Repository.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Repository\obj\Debug\TesteSenior.Repository.pdb

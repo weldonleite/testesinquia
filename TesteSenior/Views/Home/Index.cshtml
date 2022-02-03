@@ -1,0 +1,239 @@
+﻿@model TesteSenior.ViewModels.FormMovimentoViewModel
+
+@{
+    ViewBag.Title = "Movimentos Manuais";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Movimentos Manuais</h3>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="row">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <label>Mês</label>
+            @Html.TextBoxFor(model => model.Mes, new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(model => model.Mes, "", new { @class="text-danger"})
+        </div>
+
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <label>Ano</label>
+            @Html.TextBoxFor(model => model.Ano, new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(model => model.Ano, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <label>Produto</label>
+            @Html.DropDownListFor(model => model.ProdutoCosif.Produto.CodProduto, ViewBag.ListaProdutos as SelectList, "Selecione", new { @class = "form-control input-sm" })
+            <span id="lblValProduto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <label>Cosif</label>
+            <select id="ProdutoCosif_CodCosif" name="ProdutoCosif.CodCosif" class="form-control input-sm"></select>
+            <span id="lblValProdutoCosif" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <label>Valor</label>
+            @Html.TextBoxFor(model => model.Valor, new { @class = "form-control input-sm" })
+        </div>
+
+        <div class="form-group col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <label>Descrição</label>
+            @Html.TextBoxFor(model => model.Descricao, new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <p>
+        <button type="button" id="btnLimpar" class="btn btn-sm btn-default" onclick="LimparCampos();">Limpar</button>
+        <button type="button" id="btnNovo" class="btn btn-sm btn-default" onclick="HabilitarCampos();">Novo</button>
+        <button type="submit" id="btnIncluir" class="btn btn-sm btn-primary" onclick="return ValidaCampos();">Incluir</button>
+    </p>
+
+    <h3>Lista</h3><hr>
+    <table id="tbMov" class="table table-hover table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>Mês</th>
+                <th>Ano</th>
+                <th>Código do Produto</th>
+                <th>Descrição do Produto</th>
+                <th>NR Lançamento</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ 
+                if(Model.Movimentos != null)
+                {
+                    foreach (var mov in Model.Movimentos)
+                    {
+                        <tr>
+                            <td>@mov.Mes</td>
+                            <td>@mov.Ano</td>
+                            <td>@mov.ProdutoCosif.Produto.CodProduto</td>
+                            <td>@mov.ProdutoCosif.Produto.Descricao</td>
+                            <td>@mov.NumLancamento</td>
+                            <td>@mov.Descricao</td>
+                            <td>R$ @mov.Valor</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script src="~/Scripts/jquery.maskMoney.min.js"></script>
+<script type="text/javascript">
+    $('#Mes').mask('00');
+    $('#Ano').mask('0000');
+    $('#Valor').maskMoney({
+        showSymbol: true,
+        thousands: '',
+        decimal: ',',
+        affixesStay: false,
+        precision: 2,
+        allowZero: true,
+        prefix: 'R$ '
+    });
+    
+
+    //Customiza a tabela de movimentos com o componente DataTabes
+    $('#tbMov').DataTable({
+        "language": {
+            "lengthMenu": "Exibir _MENU_ registros por página",
+            "zeroRecords": "Nenhum registro encontrado",
+            "info": "Página  _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhum registro disponível",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Próxima"
+            },
+            "sSearch": "Pesquisar",
+            "infoFiltered": "(filtrado do total de _MAX_ registros)"
+        }
+    });
+    
+
+
+    //Aplica as máscaras nos campos numéricos
+    $(document).ready(function () {
+        LimparCampos();
+
+        //Quando selecionado um produto no dropdown, chama função ajax para carregar os produtos cosig
+        $("#ProdutoCosif_Produto_CodProduto").change(function () {
+            CarregaProdutosCosif($(this).val());
+        });
+    });
+
+    //Função AJAX para carregar dropdownlist com os produtos cosig
+    function CarregaProdutosCosif(codigoProduto) {
+        $.getJSON('@Url.Action("ListarProdutoCosif","Home")', { codProduto: codigoProduto }, function (data) {
+
+            $("#ProdutoCosif_CodCosif option").each(function () {
+                $(this).remove();
+            });
+
+            $.each(data, function (index, prCosif) {
+                $("#ProdutoCosif_CodCosif").append('<option value="' + prCosif.CodCosif + '">' + prCosif.CodCosif + '</option>');
+            });
+
+            $("#ProdutoCosif_CodCosif").append('<option value="" selected="selected">Selecione</option>');
+        })
+    }
+
+    //Validação dos campos do formulário antes do Post da página
+    function ValidaCampos() {
+        var ret = true;
+        var valor = parseFloat($("#Valor").val());
+        var mes = parseInt($("#Mes").val());
+        var ano = parseInt($("#Ano").val());
+
+        if (valor <= 0) {
+            $("#Msg").html("<strong>Atenção!</strong> O campo valor deve ser maior que 0");
+            $("#divAlert").attr("class", "alert alert-warning alert-dismissible");
+            $("#divAlert").show();
+            ret = false;
+        }
+
+        if (mes <= 0 || mes > 12) {
+            $("#Msg").html("<strong>Atenção!</strong> Mês inválido. Informe um número de 1 a 12");
+            $("#divAlert").attr("class", "alert alert-warning alert-dismissible");
+            $("#divAlert").show();
+            ret = false;
+        }
+
+        if (ano <= 0) {
+            $("#Msg").html("<strong>Atenção!</strong> O campo ano deve ser maior que 0");
+            $("#divAlert").attr("class", "alert alert-warning alert-dismissible");
+            $("#divAlert").show();
+            ret = false;
+        }
+
+        if ($("#ProdutoCosif_CodCosif").val() == "" || $("#ProdutoCosif_CodCosif").val() == null) {
+            $("#Msg").html("<strong>Atenção!</strong> Selecione o valor do campo Cosif");
+            $("#divAlert").attr("class", "alert alert-warning alert-dismissible");
+            $("#divAlert").show();
+            ret = false;
+        }
+
+        if ($("#ProdutoCosif_Produto_CodProduto").val() == "" || $("#ProdutoCosif_Produto_CodProduto").val() == null) {
+            $("#Msg").html("<strong>Atenção!</strong> Selecione o valor do campo Produto");
+            $("#divAlert").attr("class", "alert alert-warning alert-dismissible");
+            $("#divAlert").show();
+            ret = false;
+        }
+
+        if ($("#Descricao").val() == "" || $("#Descricao").val() == null) {
+            $("#Msg").html("<strong>Atenção!</strong> Preencha o campo Descrição");
+            $("#divAlert").attr("class", "alert alert-warning alert-dismissible");
+            $("#divAlert").show();
+            ret = false;
+        }
+        return ret;
+    }
+
+    //Limpa os camos do formulário
+    function LimparCampos() {
+        $("#Mes").val("");
+        $("#Ano").val("");
+        $("#Valor").val("");
+        $("#ProdutoCosif_Produto_CodProduto").val("");
+        $("#ProdutoCosif_CodCosif").val("");
+        $("#Descricao").val("");
+
+        $("#Mes").prop("disabled", true);
+        $("#Ano").prop("disabled", true);
+        $("#Valor").prop("disabled", true);
+        $("#ProdutoCosif_Produto_CodProduto").prop("disabled", true);
+        $("#ProdutoCosif_CodCosif").prop("disabled", true);
+        $("#Descricao").prop("disabled", true);
+        $("#btnIncluir").prop("disabled", true);
+    }
+
+    //Habilita os campos do formulário para inclusão de novo movimento
+    function HabilitarCampos() {
+        $("#Mes").prop("disabled", false);
+        $("#Ano").prop("disabled", false);
+        $("#Valor").prop("disabled", false);
+        $("#ProdutoCosif_Produto_CodProduto").prop("disabled", false);
+        $("#ProdutoCosif_CodCosif").prop("disabled", false);
+        $("#Descricao").prop("disabled", false);
+        $("#btnIncluir").prop("disabled", false);
+    }
+</script>

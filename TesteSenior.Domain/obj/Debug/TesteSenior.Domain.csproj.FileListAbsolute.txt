@@ -1,0 +1,4 @@
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Domain\bin\Debug\TesteSenior.Domain.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Domain\bin\Debug\TesteSenior.Domain.pdb
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Domain\obj\Debug\TesteSenior.Domain.dll
+C:\Users\wleite\Source\Workspaces\TesteSenior\TesteSenior.Domain\obj\Debug\TesteSenior.Domain.pdb
